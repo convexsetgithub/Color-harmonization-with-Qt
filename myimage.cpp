@@ -101,7 +101,7 @@ QVariant MyImage::TV() const {
 }
 void MyImage::setTV(const QVariant& TV) {
     m_TV = TV.value<TemplateValue>();
-    qDebug() << "ID = " << m_TV.id << "arc = " << m_TV.arc << "distance" << m_TV.distance;
+    qDebug() << "Name = " << m_name << "ID = " << m_TV.id << "arc = " << m_TV.arc << "distance" << m_TV.distance;
 }
 
 QImage MyImage::fit500(QImage * image) {

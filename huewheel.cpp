@@ -85,7 +85,9 @@ QVariant HueWheel::TV() const {
 
 void HueWheel::setTV(const QVariant& TV) {
     m_TV = TV.value<TemplateValue>();
+    qDebug() << "Name = " << m_name << "ID = " << m_TV.id << "arc = " << m_TV.arc << "distance" << m_TV.distance;
 }
+
 
 void HueWheel::setFileName(const QString &fileName)
 {
@@ -147,7 +149,6 @@ void HueWheel::paint(QPainter *painter)
     painter->drawArc(-rInner, -rInner, rInner * 2, rInner * 2, 0, 16 * 360);
     float rOuter = r/2-m_margin;
     painter->drawArc(-rOuter, -rOuter, rOuter * 2, rOuter * 2, 0, 16 * 360);
-
     drawTemplate(painter, rInner);
 }
 
@@ -177,7 +178,7 @@ void HueWheel::computeMostFitTemplate() {
     HueTemplate HT;
     m_TV = HT.computeDistance(m_image, 0);
     qDebug() << "Type = " << HT.names[0] << "Arc = " << m_TV.arc << "Distance" << m_TV.distance;
-    for (int i = 0; i < 7; i++) {
+    for (int i = 1; i < 7; i++) {
         TemplateValue temp = HT.computeDistance(m_image, i);
         if (temp.distance < m_TV.distance)
             m_TV = temp;

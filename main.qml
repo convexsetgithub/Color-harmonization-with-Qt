@@ -2,7 +2,9 @@ import QtQuick 2.4
 import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
+import QtQuick.Layouts 1.1
 import Images 1.0
+
 ApplicationWindow {
     title: qsTr("Color Hamonization")
     width: 1024
@@ -32,26 +34,30 @@ ApplicationWindow {
             }
         }
         Menu {
-            title: qsTr("Tools")
+            title: qsTr("&Tools")
             MenuItem {
-                text: qsTr("ComputeTemplate")
-                onTriggered: image4.computeMostFitTemplate();
+                text: qsTr("&ComputeTemplate")
+                onTriggered: image3.computeMostFitTemplate();
             }
             MenuItem {
-                text: qsTr("DrawTemplate")
-                onTriggered: image2.setTV(image4.TV());
+                text: qsTr("&DrawTemplate")
+                onTriggered: {
+                    image2.setTV(image3.TV());
+                    image4.setTV(image3.TV());
+                }
             }
         }
     }
 
     toolBar: ToolBar{
-        //RowLayout {
+        RowLayout {
             anchors.fill: parent
             ToolButton{
                 text: "ComputeTemplate"
-                onClicked: image4.computeMostFitTemplate();
+                iconSource: "computeTemplate.png"
+                onClicked: image3.computeMostFitTemplate();
             }
-        //}
+        }
     }
 
     MainForm {
