@@ -49,7 +49,7 @@ public:
     void setImage(const QImage &image);
     void drawTemplate(QPainter *painter, int rInner);
 
-
+    Q_INVOKABLE void shiftImage();
     Q_INVOKABLE QVariant TV() const;
     Q_INVOKABLE void setTV(const QVariant &TV);
     Q_INVOKABLE void computeMostFitTemplate();

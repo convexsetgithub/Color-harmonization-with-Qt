@@ -44,6 +44,7 @@ ApplicationWindow {
                 onTriggered: {
                     image2.setTV(image3.TV());
                     image4.setTV(image3.TV());
+                    image4.shiftImage();
                 }
             }
         }

@@ -47,9 +47,9 @@ HueWheel::HueWheel(QQuickItem *parent)
     for (int i = 0; i < 360; i++)
         hueHistogram[i] = 0;
     maxHue = 0;
-    m_TV.arc = 0;
+    m_TV.arc = 180;
     m_TV.distance = 0;
-    m_TV.id = -1;
+    m_TV.id = 4;
 }
 
 QString HueWheel::name() const
@@ -100,6 +100,21 @@ void HueWheel::setFileName(const QString &fileName)
     }
 }
 
+void HueWheel::shiftImage() {
+    HueTemplate HT;
+    for (int i = 0; i < m_image.width(); i++) {
+        for (int j = 0; j < m_image.height(); j++) {
+            QRgb pColor = m_image.pixel(i, j);
+            QColor qColor(pColor);
+            int hue = qColor.hsvHue();
+            int targetHue = HT.targetHue(m_TV.arc, hue, m_TV.id);
+            qColor.setHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
+            m_image.setPixel(i, j, qColor.rgb());
+        }
+    }
+    computeHueHistogram();
+    update();
+}
 
 void HueWheel::paint(QPainter *painter)
 {

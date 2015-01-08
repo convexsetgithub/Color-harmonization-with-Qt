@@ -39,7 +39,7 @@
 ****************************************************************************/
 #include "myimage.h"
 #include <QPainter>
-
+#include <math.h>
 MyImage::MyImage(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
@@ -80,6 +80,7 @@ void MyImage::setImage(const QImage &image)
     m_image = image;
 }
 
+
 void MyImage::paint(QPainter *painter)
 {
     qDebug() << "FileName = " << m_fileName;
@@ -89,8 +90,18 @@ void MyImage::paint(QPainter *painter)
         painter->drawImage(QPoint(0,0), m_image);
     }
     else {
-        // drawTemplate
-
+        HueTemplate HT;
+        for (int i = 0; i < m_image.width(); i++) {
+            for (int j = 0; j < m_image.height(); j++) {
+                QRgb pColor = m_image.pixel(i, j);
+                QColor qColor(pColor);
+                int hue = qColor.hsvHue();
+                int targetHue = HT.targetHue(m_TV.arc, hue, m_TV.id);
+                qColor.setHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
+                m_image.setPixel(i, j, qColor.rgb());
+            }
+        }
+        painter->drawImage(QPoint(0,0), m_image);
     }
 }
 
@@ -102,6 +113,7 @@ QVariant MyImage::TV() const {
 void MyImage::setTV(const QVariant& TV) {
     m_TV = TV.value<TemplateValue>();
     qDebug() << "Name = " << m_name << "ID = " << m_TV.id << "arc = " << m_TV.arc << "distance" << m_TV.distance;
+    update();
 }
 
 QImage MyImage::fit500(QImage * image) {

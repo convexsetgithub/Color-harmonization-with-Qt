@@ -27,6 +27,9 @@ public:
     TemplateValue computeDistance(QImage & image, int id);
     long long int helpComputeDistance(int arc, QImage & image, int id);
     long long int computeArcDistance(int arc, int hue, int id);
+    int computeNearRegion(int arc, int hue, int id);
+    int targetHue(int arc, int hue, int id);
+    int counterOrcouterWise(int hue, int center);
     int nearestDistance(int hue1, int hue2);
 };
 #endif // TEMPLATE_H
