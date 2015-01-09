@@ -91,12 +91,11 @@ void MyImage::paint(QPainter *painter)
         HueTemplate HT;
         for (int i = 0; i < m_image.width(); i++) {
             for (int j = 0; j < m_image.height(); j++) {
-                QRgb pColor = m_image.pixel(i, j);
-                QColor qColor(pColor);
+                QColor qColor = QColor::fromRgb(m_image.pixel(i, j));
                 int hue = qColor.hsvHue();
                 int targetHue = HT.targetHue(m_TV.arc, hue, m_TV.id);
-                qColor.setHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
-                m_image.setPixel(i, j, qColor.rgb());
+                QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
+                m_image.setPixel(i, j, qRgb(targetColor.redF() * 255.0, targetColor.greenF() * 255.0, targetColor.blueF() * 255.0));
             }
         }
         painter->drawImage(QPoint(0,0), m_image);

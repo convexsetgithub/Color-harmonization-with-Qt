@@ -103,16 +103,8 @@ void HueWheel::shiftImage() {
             QColor qColor = QColor::fromRgb(m_image.pixel(i, j));
             int hue = qColor.hsvHue();
             int targetHue = HT.targetHue(m_TV.arc, hue, m_TV.id);
-            //if (i == 170 && j == 340)
-            //    qDebug() << "i " << i << "j " << j << "TargetHue " << targetHue << "Hue" << hue << "Color" << qColor << "RGB" << qColor.rgba();
             QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
-            if (i == 170 && j == 340)
-                qDebug() << "i " << i << "j " << j  << "Hue" << targetColor.hue() << "Color" << targetColor << "RGB" << targetColor.rgba() << "R" << targetColor.red() << "G" << targetColor.green() << "B" << targetColor.blue();
-            m_image.setPixel(i, j, qRgb(targetColor.red(), targetColor.green(), targetColor.blue()));
-            qColor = QColor::fromRgb(m_image.pixel(i, j));
-            hue = qColor.hsvHue();
-            if (i == 170 && j == 340)
-                qDebug() << "i " << i << "j " << j  << "Hue" << hue << "Color" << qColor << "RGB" << qColor.rgba() << "R" << qColor.red() << "G" << qColor.green() << "B" << qColor.blue();
+            m_image.setPixel(i, j, qRgb(targetColor.redF() * 255.0, targetColor.greenF() * 255.0, targetColor.blueF() * 255.0));
         }
     }
     computeHueHistogram();
@@ -150,12 +142,21 @@ void HueWheel::paint(QPainter *painter)
     painter->drawEllipse(QPoint(0,0),r/2-m_margin-m_wheelWidth,r/2-m_margin-m_wheelWidth);
     // Draw hueHistorgram
     painter->setPen(QPen(conicalGradient, 1, Qt::SolidLine));
+    HueTemplate HT;
     for (int i = 0; i < 360; i++) {
         float rInner = r/2-m_margin-m_wheelWidth;
         float per;
         if (maxHue != 0) {
-            per = rInner - ((float)hueHistogram[i]/(float)maxHue) * rInner;
-            painter->drawLine(QPoint(rInner * qCos((float)i/180.0 * M_PI), -rInner * qSin((float)i/180.0 * M_PI)), QPoint(per * qCos((float)i/180.0 * M_PI), -per * qSin((float)i/180.0* M_PI)));
+            if (m_name == "outputHue") {
+                if (HT.computeArcDistance(m_TV.arc, i, m_TV.id) == 0) {
+                    per = rInner - ((float)hueHistogram[i]/(float)maxHue) * rInner;
+                    painter->drawLine(QPoint(rInner * qCos((float)i/180.0 * M_PI), -rInner * qSin((float)i/180.0 * M_PI)), QPoint(per * qCos((float)i/180.0 * M_PI), -per * qSin((float)i/180.0* M_PI)));
+                }
+            }
+            else {
+                per = rInner - ((float)hueHistogram[i]/(float)maxHue) * rInner;
+                painter->drawLine(QPoint(rInner * qCos((float)i/180.0 * M_PI), -rInner * qSin((float)i/180.0 * M_PI)), QPoint(per * qCos((float)i/180.0 * M_PI), -per * qSin((float)i/180.0* M_PI)));
+            }
         }
     }
     // Black circles
