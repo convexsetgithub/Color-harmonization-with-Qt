@@ -8,7 +8,7 @@ import Images 1.0
 ApplicationWindow {
     title: qsTr("Color Hamonization")
     width: 1024
-    height: 768
+    height: 900
     visible: true
 
     FileDialog {
@@ -54,9 +54,18 @@ ApplicationWindow {
         RowLayout {
             anchors.fill: parent
             ToolButton{
-                text: "ComputeTemplate"
+                //text: "ComputeTemplate"
                 iconSource: "computeTemplate.png"
                 onClicked: image3.computeMostFitTemplate();
+            }
+            ToolButton{
+                //text: "DrawTemplate"
+                iconSource: "drawTemplate.png"
+                onClicked: {
+                    image2.setTV(image3.TV());
+                    image4.setTV(image3.TV());
+                    image4.shiftImage();
+                }
             }
         }
     }
@@ -93,7 +102,7 @@ ApplicationWindow {
             name: "inputHue"
             x: 0
             y: 506
-            width: 150; height: 150
+            width: 300; height: 300
             margin: 1; wheelWidth: 15
             fileName: image1.fileName;
         }
@@ -103,7 +112,7 @@ ApplicationWindow {
             name: "outputHue"
             x: 524
             y: 506
-            width: 150; height: 150
+            width: 300; height: 300
             margin: 1; wheelWidth: 15
             fileName: image1.fileName;
         }

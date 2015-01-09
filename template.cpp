@@ -86,8 +86,6 @@ int HueTemplate::computeNearRegion(int arc, int hue, int id) {
         int border1 = (arc - region1Arcs[id]/2 + 360) % 360;
         int border2 = region1Arcs[id];
         int shiftHue = (hue - border1 + 360) % 360;
-        if (shiftHue < border2)
-            return 0;
         border1 = 0;
         int d1 = nearestDistance(border1, shiftHue);
         int d2 = nearestDistance(border2, shiftHue);
@@ -97,8 +95,6 @@ int HueTemplate::computeNearRegion(int arc, int hue, int id) {
         int border1 = (arc + region2Shift[id] - region2Arcs[id]/2 + 360) % 360;
         int border2 = region2Arcs[id];
         int shiftHue = (hue - border1 + 360) % 360;
-        if (shiftHue < border2)
-            return 0;
         border1 = 0;
         int d1 = nearestDistance(border1, shiftHue);
         int d2 = nearestDistance(border2, shiftHue);
@@ -111,7 +107,7 @@ int HueTemplate::computeNearRegion(int arc, int hue, int id) {
     return region;
 }
 
-int HueTemplate::counterOrcouterWise(int hue, int center) {
+float HueTemplate::counterOrcouterWise(int hue, int center) {
     int d = (hue - center + 360) % 360;
     if (d > 180)
         return -1;
@@ -121,6 +117,8 @@ int HueTemplate::counterOrcouterWise(int hue, int center) {
 int HueTemplate::targetHue(int arc, int hue, int id) {
     if (id == 7)
         return -1;
+    if (hue == -1)
+        return hue;
     int region = computeNearRegion(arc, hue, id);
     int targetHue = hue;
     float delta;
@@ -130,15 +128,15 @@ int HueTemplate::targetHue(int arc, int hue, int id) {
     if (region == 1) {
         delta = region1Arcs[id]/2.0;
         center = arc;
-        distanceToCenter = nearestDistance(hue, center);
-        targetHue = center + counterOrcouterWise(hue, (int)center) * delta * ( 1.0 - (1.0/(delta * sqrt(2.0 * M_PI))) * exp(- (distanceToCenter * distanceToCenter)/ (2 * delta * delta)));
+        distanceToCenter = nearestDistance(hue, (int)center);
+        targetHue = center + counterOrcouterWise(hue, (int)center) * (((float)region1Arcs[id])/2.0) * ( 1.0 - (1.0) * exp(- (distanceToCenter * distanceToCenter)/ (2.0 * delta * delta)));
         targetHue = (targetHue + 360) % 360;
     }
     else if (region == 2) {
         delta = region2Arcs[id]/2.0;
         center = (arc + region2Shift[id] + 360) % 360;;
         distanceToCenter = nearestDistance(hue, center);
-        targetHue = center + counterOrcouterWise(hue, (int)center) * delta * ( 1.0 - (1.0/(delta * sqrt(2.0 * M_PI))) * exp(- (distanceToCenter * distanceToCenter)/ (2 * delta * delta)));
+        targetHue = center + counterOrcouterWise(hue, (int)center) * (((float)region2Arcs[id])/2.0) * ( 1.0 - (1.0/((delta/180 * M_PI) * sqrt(2.0 * M_PI))) * exp(- (distanceToCenter * distanceToCenter)/ (2.0 * delta * delta)));
         targetHue = (targetHue + 360) % 360;
     }
     return targetHue;

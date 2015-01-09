@@ -48,7 +48,14 @@ public:
     QImage image() const;
     void setImage(const QImage &image);
     void drawTemplate(QPainter *painter, int rInner);
-
+    void reset() {
+        for (int i = 0; i < 360; i++)
+            hueHistogram[i] = 0;
+        maxHue = 0;
+        m_TV.arc = 0;
+        m_TV.distance = 0;
+        m_TV.id = 1;
+    }
     Q_INVOKABLE void shiftImage();
     Q_INVOKABLE QVariant TV() const;
     Q_INVOKABLE void setTV(const QVariant &TV);

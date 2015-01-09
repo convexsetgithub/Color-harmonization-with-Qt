@@ -43,7 +43,6 @@
 MyImage::MyImage(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
-    m_TV.id = -1;
 }
 
 QString MyImage::name() const
@@ -63,11 +62,10 @@ QString MyImage::fileName() const
 
 void MyImage::setFileName(const QString &fileName)
 {
-    if (m_fileName != fileName) {
-        m_fileName = fileName;
-        qDebug() << m_name << "file set" << m_fileName;
-        update();
-    }
+    reset();
+    m_fileName = fileName;
+    qDebug() << m_name << "file set" << m_fileName;
+    update();
 }
 
 QImage MyImage::image() const

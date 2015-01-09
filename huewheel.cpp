@@ -41,15 +41,11 @@
 #include "template.h"
 #include <QPainter>
 #include <QtCore/qmath.h>
+#include "math.h"
 HueWheel::HueWheel(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
-    for (int i = 0; i < 360; i++)
-        hueHistogram[i] = 0;
-    maxHue = 0;
-    m_TV.arc = 180;
-    m_TV.distance = 0;
-    m_TV.id = 4;
+    reset();
 }
 
 QString HueWheel::name() const
@@ -91,25 +87,32 @@ void HueWheel::setTV(const QVariant& TV) {
 
 void HueWheel::setFileName(const QString &fileName)
 {
-    if (m_fileName != fileName) {
-        m_fileName = fileName;
-        m_image = QImage(fileName);
-        qDebug() << m_name << "file set" << m_fileName;
-        computeHueHistogram();
-        update();
-    }
+    reset();
+    m_fileName = fileName;
+    m_image = QImage(fileName);
+    qDebug() << m_name << "file set" << m_fileName << "format = " << m_image.format();
+    computeHueHistogram();
+    update();
+
 }
 
 void HueWheel::shiftImage() {
     HueTemplate HT;
     for (int i = 0; i < m_image.width(); i++) {
         for (int j = 0; j < m_image.height(); j++) {
-            QRgb pColor = m_image.pixel(i, j);
-            QColor qColor(pColor);
+            QColor qColor = QColor::fromRgb(m_image.pixel(i, j));
             int hue = qColor.hsvHue();
             int targetHue = HT.targetHue(m_TV.arc, hue, m_TV.id);
-            qColor.setHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
-            m_image.setPixel(i, j, qColor.rgb());
+            //if (i == 170 && j == 340)
+            //    qDebug() << "i " << i << "j " << j << "TargetHue " << targetHue << "Hue" << hue << "Color" << qColor << "RGB" << qColor.rgba();
+            QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
+            if (i == 170 && j == 340)
+                qDebug() << "i " << i << "j " << j  << "Hue" << targetColor.hue() << "Color" << targetColor << "RGB" << targetColor.rgba() << "R" << targetColor.red() << "G" << targetColor.green() << "B" << targetColor.blue();
+            m_image.setPixel(i, j, qRgb(targetColor.red(), targetColor.green(), targetColor.blue()));
+            qColor = QColor::fromRgb(m_image.pixel(i, j));
+            hue = qColor.hsvHue();
+            if (i == 170 && j == 340)
+                qDebug() << "i " << i << "j " << j  << "Hue" << hue << "Color" << qColor << "RGB" << qColor.rgba() << "R" << qColor.red() << "G" << qColor.green() << "B" << qColor.blue();
         }
     }
     computeHueHistogram();
@@ -152,7 +155,7 @@ void HueWheel::paint(QPainter *painter)
         float per;
         if (maxHue != 0) {
             per = rInner - ((float)hueHistogram[i]/(float)maxHue) * rInner;
-            painter->drawLine(QPoint(rInner * qCos((float)i/180.0 * 3.14), -rInner * qSin((float)i/180.0 * 3.14)), QPoint(per * qCos((float)i/180.0 * 3.14), -per * qSin((float)i/180.0* 3.14)));
+            painter->drawLine(QPoint(rInner * qCos((float)i/180.0 * M_PI), -rInner * qSin((float)i/180.0 * M_PI)), QPoint(per * qCos((float)i/180.0 * M_PI), -per * qSin((float)i/180.0* M_PI)));
         }
     }
     // Black circles

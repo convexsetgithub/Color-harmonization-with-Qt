@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>MainForm.ui.qml</file>
         <file>computeTemplate.png</file>
+        <file>drawTemplate.png</file>
     </qresource>
 </RCC>

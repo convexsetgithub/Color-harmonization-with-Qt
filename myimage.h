@@ -25,7 +25,9 @@ public:
     void setFileName(const QString &fileName);
     QImage image() const;
     void setImage(const QImage &image);
-
+    void reset() {
+        m_TV.id = -1;
+    }
     void paint(QPainter *painter);
 
     Q_INVOKABLE QVariant TV() const;
