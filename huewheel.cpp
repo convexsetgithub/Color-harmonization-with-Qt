@@ -228,7 +228,7 @@ void HueWheel::shiftImageWithSpatialLocality() {
                 targetHue = HT.targetHueWithSpatialLocality(i, j, m_image, m_TV);
             //else
                 //targetHue =  HT.targetHue(m_TV.arc, hue, m_TV.id);
-            delete [] labels;
+            //delete [] labels;
             QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
             m_image.setPixel(i, j, qRgb(targetColor.redF() * 255.0, targetColor.greenF() * 255.0, targetColor.blueF() * 255.0));
         }
