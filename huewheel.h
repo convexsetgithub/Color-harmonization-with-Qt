@@ -40,7 +40,8 @@ public:
     }
 
     void computeHueHistogram();
-
+    Q_INVOKABLE void shiftImageWithSpatialLocality();
+    int targetHueWithSpatialLocality(int i, int j);
     QString name() const;
     void setName(const QString &name);
     QString fileName() const;
@@ -52,9 +53,9 @@ public:
         for (int i = 0; i < 360; i++)
             hueHistogram[i] = 0;
         maxHue = 0;
-        m_TV.arc = 0;
+        m_TV.arc = 300;
         m_TV.distance = 0;
-        m_TV.id = 1;
+        m_TV.id = 3;
     }
     Q_INVOKABLE void shiftImage();
     Q_INVOKABLE QVariant TV() const;

@@ -13,7 +13,7 @@ ApplicationWindow {
 
     FileDialog {
         id: fileDialog
-        nameFilters: [ "Image files (*.jpg *.png)", "All files (*)" ]
+        nameFilters: [ "Image files (*jpeg *.jpg *.png)", "All files (*)" ]
         title: "Choose a image"
         onAccepted: {
             //messageDialog.show(qsTr("" + fileUrl));
@@ -44,7 +44,8 @@ ApplicationWindow {
                 onTriggered: {
                     image2.setTV(image3.TV());
                     image4.setTV(image3.TV());
-                    image4.shiftImage();
+                    image2.shiftImageWithSpatialLocality();
+                    image4.shiftImageWithSpatialLocality();
                 }
             }
         }
@@ -52,19 +53,37 @@ ApplicationWindow {
 
     toolBar: ToolBar{
         RowLayout {
-            anchors.fill: parent
+            //anchors.fill: parent
             ToolButton{
-                //text: "ComputeTemplate"
+                text: "ComputeTemplate"
                 iconSource: "computeTemplate.png"
                 onClicked: image3.computeMostFitTemplate();
             }
             ToolButton{
-                //text: "DrawTemplate"
+                text: "DrawTemplate"
                 iconSource: "drawTemplate.png"
                 onClicked: {
                     image2.setTV(image3.TV());
                     image4.setTV(image3.TV());
+                    image2.shiftImageWithSpatialLocality();
+                    image4.shiftImageWithSpatialLocality();
+                }
+            }
+            ToolButton{
+                text: "drawTemplateNoLocality"
+                iconSource: "drawTemplateNoLocality.png"
+                onClicked: {
+                    image2.setTV(image3.TV());
+                    image4.setTV(image3.TV());
+                    image2.shiftImage();
                     image4.shiftImage();
+                }
+            }
+            ToolButton{
+                text: "reload"
+                iconSource: "reload.png"
+                onClicked: {
+                    image1.reload();
                 }
             }
         }
@@ -85,7 +104,7 @@ ApplicationWindow {
             width: 500
             height: 500
             name: "inputImage"
-            fileName: "C://Users/user/Pictures/Flower.jpg"
+            fileName: "D://CG/icg_final/testing3.png"
         }
 
         MyImage {

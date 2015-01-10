@@ -4,5 +4,7 @@
         <file>MainForm.ui.qml</file>
         <file>computeTemplate.png</file>
         <file>drawTemplate.png</file>
+        <file>drawTemplateNoLocality.png</file>
+        <file>reload.png</file>
     </qresource>
 </RCC>

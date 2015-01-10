@@ -176,19 +176,16 @@ void HueWheel::drawTemplate(QPainter *painter, int rInner) {
         return;
     HueTemplate HT;
     int border1;
+    painter->setPen(Qt::NoPen);
     if (HT.region1Arcs[m_TV.id] != 0) {
         border1 = (m_TV.arc - HT.region1Arcs[m_TV.id]/2 + 360) % 360;
         //qDebug() << "b1 = " << border1;
         painter->setBrush(QBrush(QColor(0, 0, 0, 80)));
         painter->drawPie(-rInner, -rInner, rInner * 2, rInner * 2, border1 * 16, HT.region1Arcs[m_TV.id] * 16);
-        painter->setBrush(Qt::NoBrush);
-        painter->drawPie(-rInner, -rInner, rInner * 2, rInner * 2, border1 * 16, HT.region1Arcs[m_TV.id] * 16);
     }
     if (HT.region2Arcs[m_TV.id] != 0) {
         border1 = (m_TV.arc + HT.region2Shift[m_TV.id] - HT.region2Arcs[m_TV.id]/2 + 360) % 360;
         painter->setBrush(QBrush(QColor(0, 0, 0, 80)));
-        painter->drawPie(-rInner, -rInner, rInner * 2, rInner * 2, border1 * 16, HT.region2Arcs[m_TV.id] * 16);
-        painter->setBrush(Qt::NoBrush);
         painter->drawPie(-rInner, -rInner, rInner * 2, rInner * 2, border1 * 16, HT.region2Arcs[m_TV.id] * 16);
     }
 }
@@ -224,4 +221,28 @@ void HueWheel::computeHueHistogram() {
         }
     }
 }
+
+void HueWheel::shiftImageWithSpatialLocality() {
+    HueTemplate HT;
+    QImage o_image = QImage(m_fileName);
+    //o_image = fit500(&o_image);
+    for (int i = 0; i < m_image.width(); i++) {
+        for (int j = 0; j < m_image.height(); j++) {
+            QColor qColor = QColor::fromRgb(m_image.pixel(i, j));
+            int hue = qColor.hsvHue();
+            int targetHue;
+            long long int * labels = HT.computeArcDistanceLabel(m_TV.arc, hue, m_TV.id);
+            if (abs(labels[2]) != labels[3])
+                targetHue = HT.targetHueWithSpatialLocality(i, j, m_image, m_TV);
+            else
+              targetHue =  HT.targetHue(m_TV.arc, hue, m_TV.id);
+            QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
+            m_image.setPixel(i, j, qRgb(targetColor.redF() * 255.0, targetColor.greenF() * 255.0, targetColor.blueF() * 255.0));
+        }
+    }
+    computeHueHistogram();
+    update();
+}
+
+
 

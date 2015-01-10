@@ -29,7 +29,11 @@ public:
     long long int computeArcDistance(int arc, int hue, int id);
     int computeNearRegion(int arc, int hue, int id);
     int targetHue(int arc, int hue, int id);
+    int targetHue(int arc, int hue, int id, int border);
     float counterOrcouterWise(int hue, int center);
     int nearestDistance(int hue1, int hue2);
+    int distance(int hue1, int hue2, int direction);
+    long long int * computeArcDistanceLabel(int arc, int hue, int id);
+    int targetHueWithSpatialLocality(int i, int j, QImage &image, TemplateValue m_TV);
 };
 #endif // TEMPLATE_H

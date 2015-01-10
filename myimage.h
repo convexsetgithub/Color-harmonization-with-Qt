@@ -29,9 +29,12 @@ public:
         m_TV.id = -1;
     }
     void paint(QPainter *painter);
-
+    Q_INVOKABLE void shiftImage();
+    Q_INVOKABLE void shiftImageWithSpatialLocality();
+    int targetHueWithSpatialLocality(int i, int j, QImage &o_image);
     Q_INVOKABLE QVariant TV() const;
     Q_INVOKABLE void setTV(const QVariant &TV);
+    Q_INVOKABLE void reload();
 //![2]
     Q_INVOKABLE void changeFileName(QString fileName);
 signals:

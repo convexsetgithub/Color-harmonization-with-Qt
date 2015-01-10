@@ -64,7 +64,10 @@ void MyImage::setFileName(const QString &fileName)
 {
     reset();
     m_fileName = fileName;
+    m_image = QImage(m_fileName);
+    m_image = fit500(&m_image);
     qDebug() << m_name << "file set" << m_fileName;
+    qDebug() << "After fit 500" << "ImageWidth = " << m_image.width() << "ImageHeight = " << m_image.height();
     update();
 }
 
@@ -78,28 +81,44 @@ void MyImage::setImage(const QImage &image)
     m_image = image;
 }
 
+void MyImage::shiftImage() {
+    HueTemplate HT;
+    for (int i = 0; i < m_image.width(); i++) {
+        for (int j = 0; j < m_image.height(); j++) {
+            QColor qColor = QColor::fromRgb(m_image.pixel(i, j));
+            int hue = qColor.hsvHue();
+            int targetHue = HT.targetHue(m_TV.arc, hue, m_TV.id);
+            QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
+            m_image.setPixel(i, j, qRgb(targetColor.redF() * 255.0, targetColor.greenF() * 255.0, targetColor.blueF() * 255.0));
+        }
+    }
+    update();
+}
+
+void MyImage::shiftImageWithSpatialLocality() {
+    HueTemplate HT;
+    QImage o_image = QImage(m_fileName);
+    o_image = fit500(&o_image);
+    for (int i = 0; i < m_image.width(); i++) {
+        for (int j = 0; j < m_image.height(); j++) {
+            QColor qColor = QColor::fromRgb(m_image.pixel(i, j));
+            int hue = qColor.hsvHue();
+            int targetHue;
+            long long int * labels = HT.computeArcDistanceLabel(m_TV.arc, hue, m_TV.id);
+            if (abs(labels[2]) != labels[3])
+                targetHue = HT.targetHueWithSpatialLocality(i, j, m_image, m_TV);
+            else
+                targetHue =  HT.targetHue(m_TV.arc, hue, m_TV.id);
+            QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
+            m_image.setPixel(i, j, qRgb(targetColor.redF() * 255.0, targetColor.greenF() * 255.0, targetColor.blueF() * 255.0));
+        }
+    }
+    update();
+}
 
 void MyImage::paint(QPainter *painter)
 {
-    qDebug() << "FileName = " << m_fileName;
-    m_image = QImage(m_fileName);
-    m_image = fit500(&m_image);
-    if (m_TV.id == -1) {
-        painter->drawImage(QPoint(0,0), m_image);
-    }
-    else {
-        HueTemplate HT;
-        for (int i = 0; i < m_image.width(); i++) {
-            for (int j = 0; j < m_image.height(); j++) {
-                QColor qColor = QColor::fromRgb(m_image.pixel(i, j));
-                int hue = qColor.hsvHue();
-                int targetHue = HT.targetHue(m_TV.arc, hue, m_TV.id);
-                QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
-                m_image.setPixel(i, j, qRgb(targetColor.redF() * 255.0, targetColor.greenF() * 255.0, targetColor.blueF() * 255.0));
-            }
-        }
-        painter->drawImage(QPoint(0,0), m_image);
-    }
+    painter->drawImage(QPoint(0,0), m_image);
 }
 
 QVariant MyImage::TV() const {
@@ -130,8 +149,11 @@ QImage MyImage::fit500(QImage * image) {
 //![0]
 
 void MyImage::changeFileName(QString fileName) {
-    m_fileName = fileName.remove(0, 8);
-    update();
+    setFileName(fileName.remove(0, 8));
+    emit fileNameChanged();
+}
+
+void MyImage::reload() {
     emit fileNameChanged();
 }
 //![0]
