@@ -147,16 +147,8 @@ void HueWheel::paint(QPainter *painter)
         float rInner = r/2-m_margin-m_wheelWidth;
         float per;
         if (maxHue != 0) {
-            if (m_name == "outputHue") {
-                if (HT.computeArcDistance(m_TV.arc, i, m_TV.id) == 0) {
-                    per = rInner - ((float)hueHistogram[i]/(float)maxHue) * rInner;
-                    painter->drawLine(QPoint(rInner * qCos((float)i/180.0 * M_PI), -rInner * qSin((float)i/180.0 * M_PI)), QPoint(per * qCos((float)i/180.0 * M_PI), -per * qSin((float)i/180.0* M_PI)));
-                }
-            }
-            else {
-                per = rInner - ((float)hueHistogram[i]/(float)maxHue) * rInner;
-                painter->drawLine(QPoint(rInner * qCos((float)i/180.0 * M_PI), -rInner * qSin((float)i/180.0 * M_PI)), QPoint(per * qCos((float)i/180.0 * M_PI), -per * qSin((float)i/180.0* M_PI)));
-            }
+            per = rInner - ((float)hueHistogram[i]/(float)maxHue) * rInner;
+            painter->drawLine(QPoint(rInner * qCos((float)i/180.0 * M_PI), -rInner * qSin((float)i/180.0 * M_PI)), QPoint(per * qCos((float)i/180.0 * M_PI), -per * qSin((float)i/180.0* M_PI)));
         }
     }
     // Black circles
@@ -229,13 +221,14 @@ void HueWheel::shiftImageWithSpatialLocality() {
     for (int i = 0; i < m_image.width(); i++) {
         for (int j = 0; j < m_image.height(); j++) {
             QColor qColor = QColor::fromRgb(m_image.pixel(i, j));
-            int hue = qColor.hsvHue();
+            //int hue = qColor.hsvHue();
             int targetHue;
-            long long int * labels = HT.computeArcDistanceLabel(m_TV.arc, hue, m_TV.id);
-            if (abs(labels[2]) != labels[3])
+            //long long int * labels = HT.computeArcDistanceLabel(m_TV.arc, hue, m_TV.id);
+            //if (abs(labels[2]) != abs(labels[3]))
                 targetHue = HT.targetHueWithSpatialLocality(i, j, m_image, m_TV);
-            else
-              targetHue =  HT.targetHue(m_TV.arc, hue, m_TV.id);
+            //else
+                //targetHue =  HT.targetHue(m_TV.arc, hue, m_TV.id);
+            delete [] labels;
             QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
             m_image.setPixel(i, j, qRgb(targetColor.redF() * 255.0, targetColor.greenF() * 255.0, targetColor.blueF() * 255.0));
         }

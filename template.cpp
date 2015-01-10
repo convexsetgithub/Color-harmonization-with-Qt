@@ -79,8 +79,8 @@ long long int HueTemplate::computeArcDistance(int arc, int hue, int id) {
 }
 
 long long int * HueTemplate::computeArcDistanceLabel(int arc, int hue, int id) {
-    long long int * labelAndDis = new long long int[4];
-    for (int i = 0; i < 4; i++)
+    long long int * labelAndDis = new long long int[5];
+    for (int i = 0; i < 5; i++)
         labelAndDis[i] = -1; // 0 for nearest one, 1 for second nearest one
     // use border1 as zero degree;
     if (region1Arcs[id] != 0) {
@@ -102,6 +102,9 @@ long long int * HueTemplate::computeArcDistanceLabel(int arc, int hue, int id) {
             labelAndDis[2] = -1;
             labelAndDis[3] = 1;
         }
+        if (shiftHue < border2) {
+            labelAndDis[4] = 1;
+        }
     }
     if (region2Arcs[id] != 0) {
         int border1 = (arc + region2Shift[id] - region2Arcs[id]/2 + 360) % 360;
@@ -121,6 +124,9 @@ long long int * HueTemplate::computeArcDistanceLabel(int arc, int hue, int id) {
             labelAndDis[3] = labelAndDis[2];
             labelAndDis[0] = d2;
             labelAndDis[2] = -2;
+        }
+        if (shiftHue < border2) {
+            labelAndDis[4] = 1;
         }
     }
     return labelAndDis;
@@ -231,6 +237,7 @@ int HueTemplate::targetHueWithSpatialLocality(int i, int j, QImage &image, Templ
     float hues[9], s[9], targetDistances[18];
     int targetBorders[18];
     int insideImage[9];
+    int insideSector[9];
     insideImage[0] = 1;
     QColor qColor = QColor::fromRgb(image.pixel(i, j));
     hues[0] = qColor.hsvHue();
@@ -259,6 +266,7 @@ int HueTemplate::targetHueWithSpatialLocality(int i, int j, QImage &image, Templ
             targetDistances[m + locality + 1] = labelAndDis[1];
             targetBorders[m] = labelAndDis[2];
             targetBorders[m + locality + 1] = labelAndDis[3];
+            insideSector[m] = labelAndDis[4];
             delete [] labelAndDis;
         }
     }
@@ -279,10 +287,16 @@ int HueTemplate::targetHueWithSpatialLocality(int i, int j, QImage &image, Templ
     targetE = lamda * E1 + E2;
     for (int combination = 1; combination < 32; combination++) {
         E1 = 0, E2 = 0;
-        mychoice = ((1 << 0) & combination) > 0 ? 1 : 0;;
+        mychoice = ((1 << 0) & combination) > 0 ? 1 : 0;
+        int meetHard = 1;
         for (int k = 0; k < locality + 1; k++) {
             if (insideImage[k]) {
+                //Check hard constraint
                 int m = ((1 << k) & combination) > 0 ? 1 : 0;
+                if (insideSector[k] == 1 && m != 0) {
+                    meetHard = 0;
+                    break;
+                }
                 //qDebug() << "m ==" << m;
                 E1 += (targetDistances[k + m * (locality + 1)]  / 180.0 * M_PI) * s[k];
                 if (targetBorders[mychoice * (locality + 1)] != targetBorders[k + m * (locality + 1)] && k != 0) {
@@ -291,12 +305,16 @@ int HueTemplate::targetHueWithSpatialLocality(int i, int j, QImage &image, Templ
                 }
             }
         }
+        if(!meetHard)
+            continue;
         float newTargetE = lamda * E1 + E2;
         if (newTargetE < targetE) {
             targetE = newTargetE;
             targetCombination = combination;
         }
     } 
+    //Draw neighbors now
+
     for (int m = 0; m < locality; m++) {
         int targetX = i + x[m];
         int targetY = j + y[m];
