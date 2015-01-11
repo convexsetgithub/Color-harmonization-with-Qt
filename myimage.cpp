@@ -40,7 +40,8 @@
 #include "myimage.h"
 #include <QPainter>
 #include <math.h>
-
+#include <QCameraExposure>
+#include <QCameraImageProcessing>
 MyImage::MyImage(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
@@ -135,13 +136,13 @@ void MyImage::setTV(const QVariant& TV) {
 }
 
 QImage MyImage::fit500(QImage * image) {
-    qDebug() << "ImageWidth = " << image->width() << "ImageHeight = " << image->height();
+    //qDebug() << "ImageWidth = " << image->width() << "ImageHeight = " << image->height();
     if (image->width() >= image->height() && image->width() > 500) {
-        qDebug() << "fit500 Width";
+        //qDebug() << "fit500 Width";
         return image->scaledToWidth(500);
     }
     else if (image->height() >= image->width() && image->height() > 500) {
-        qDebug() << "fit500 Height";
+        //qDebug() << "fit500 Height";
         return image->scaledToHeight(500);
     }
     else
@@ -160,14 +161,24 @@ void MyImage::reload() {
     emit fileNameChanged();
 }
 void MyImage::setSurface() {
-    m_image = surface.img;
     surface.show = this;
 }
 void MyImage::openCamera() {
     device = QCamera::availableDevices()[0];
     static QCamera camera(device);
     camera.setViewfinder(&surface);
+    QCameraExposure * CE = camera.exposure();
+    qDebug() << "STS = " << CE->shutterSpeed();
+    qDebug() << "ISO = " << CE->isoSensitivity();
+    qDebug() << "FM = " << CE->flashMode();
+    //qDebug() << "ALL = " << CE->dumpObjectInfo();
+    qDebug() << "EC = " << CE->exposureCompensation();
+    CE->setExposureCompensation(0);
+    CE->setExposureMode(QCameraExposure::ExposurePortrait);
+    QCameraImageProcessing * IP = camera.imageProcessing();
+    IP->setWhiteBalanceMode(QCameraImageProcessing::WhiteBalanceFlash);
     camera.start();
+
 }
 
 

@@ -45,6 +45,7 @@ public:
     Q_INVOKABLE void setSurface();
 //![2]
     Q_INVOKABLE void changeFileName(QString fileName);
+    QImage fit500(QImage * image);
 signals:
     void fileNameChanged();
 //![2]
@@ -52,7 +53,7 @@ signals:
 private:
     QByteArray device;
     MyVideoSurface surface;
-    QImage fit500(QImage * image);
+
     QString m_name;
     QString m_fileName;
     QImage m_image;

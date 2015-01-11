@@ -9,8 +9,11 @@ class MyImage;
 class MyVideoSurface: public QAbstractVideoSurface{
     Q_OBJECT
 public:
+    int counter;
     MyVideoSurface(QObject * parent = NULL) : QAbstractVideoSurface(parent)
-    {}
+    {
+        counter = 0;
+    }
 
     QList<QVideoFrame::PixelFormat>
     supportedPixelFormats(QAbstractVideoBuffer::HandleType type) const{

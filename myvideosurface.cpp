@@ -7,7 +7,7 @@
 
 
 bool MyVideoSurface::present(const QVideoFrame& frame){
-    if (frame.isValid() ) {
+    if (frame.isValid()) {
         QVideoFrame cloneFrame(frame);
         cloneFrame.map(QAbstractVideoBuffer::ReadOnly);
         img = QImage(cloneFrame.bits(),
@@ -15,9 +15,15 @@ bool MyVideoSurface::present(const QVideoFrame& frame){
                      cloneFrame.height(),
                      QVideoFrame::imageFormatFromPixelFormat(cloneFrame.pixelFormat()));
 
-        // do something with the image ...
+        //do something with the image ...
         //img = &img1;
-        show->update();
+        //counter++;
+        //if (counter % 100 == 0) {
+            counter = 0;
+            //qDebug() << "PrintImage";
+            show->setImage(show->fit500(&img));
+            show->update();
+        //}
 
         cloneFrame.unmap();
         return true;
