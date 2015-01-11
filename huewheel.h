@@ -64,6 +64,7 @@ public:
     Q_INVOKABLE void setTV(const QVariant &TV);
     Q_INVOKABLE void computeMostFitTemplate();
     Q_INVOKABLE void computeMostFitTemplateX(int X);
+    Q_INVOKABLE void fitTemplateX(int X, int scale);
 //![2]
 
 signals:

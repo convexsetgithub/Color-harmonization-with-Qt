@@ -211,6 +211,14 @@ void HueWheel::computeMostFitTemplateX(int X) {
     update();
 }
 
+void HueWheel::fitTemplateX(int X, int scale) {
+    HueTemplate HT;
+    QImage o_image = QImage(m_fileName);
+    o_image = fitX(&o_image, scale);
+    m_TV = HT.computeDistance(o_image, X);
+    update();
+}
+
 void HueWheel::computeHueHistogram() {
     maxHue = 0;
     for (int i = 0; i < 360; i++)

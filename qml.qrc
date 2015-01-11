@@ -7,5 +7,13 @@
         <file>drawTemplateNoLocality.png</file>
         <file>reload.png</file>
         <file>computeTemplateX.png</file>
+        <file>I.png</file>
+        <file>L.png</file>
+        <file>littleI.png</file>
+        <file>N.png</file>
+        <file>T.png</file>
+        <file>V.png</file>
+        <file>X.png</file>
+        <file>Y.png</file>
     </qresource>
 </RCC>

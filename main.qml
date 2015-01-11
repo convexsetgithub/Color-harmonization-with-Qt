@@ -101,6 +101,38 @@ ApplicationWindow {
                     image1.reload();
                 }
             }
+            ToolButton{
+                iconSource: "littleI.png"
+                onClicked: image3.fitTemplateX(0, 100);
+            }
+            ToolButton{
+                iconSource: "V.png"
+                onClicked: image3.fitTemplateX(1, 100);
+            }
+            ToolButton{
+                iconSource: "L.png"
+                onClicked: image3.fitTemplateX(2, 100);
+            }
+            ToolButton{
+                iconSource: "I.png"
+                onClicked: image3.fitTemplateX(3, 100);
+            }
+            ToolButton{
+                iconSource: "T.png"
+                onClicked: image3.fitTemplateX(4, 100);
+            }
+            ToolButton{
+                iconSource: "Y.png"
+                onClicked: image3.fitTemplateX(5, 100);
+            }
+            ToolButton{
+                iconSource: "X.png"
+                onClicked: image3.fitTemplateX(6, 100);
+            }
+            ToolButton{
+                iconSource: "N.png"
+                onClicked: image3.fitTemplateX(7, 100);
+            }
         }
     }
 

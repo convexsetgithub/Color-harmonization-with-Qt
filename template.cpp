@@ -314,7 +314,7 @@ int HueTemplate::targetHueWithSpatialLocality(int i, int j, QImage &image, Templ
         }
     } 
     //Draw neighbors now
-
+    /*
     for (int m = 0; m < locality; m++) {
         int targetX = i + x[m];
         int targetY = j + y[m];
@@ -325,7 +325,7 @@ int HueTemplate::targetHueWithSpatialLocality(int i, int j, QImage &image, Templ
             QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
             image.setPixel(targetX, targetY, qRgb(targetColor.redF() * 255.0, targetColor.greenF() * 255.0, targetColor.blueF() * 255.0));
         }
-    }
+    }*/
     mychoice = 1 & targetCombination;
     return targetHue(m_TV.arc, hues[0], m_TV.id, targetBorders[mychoice * (locality + 1)]);
 }
