@@ -24,6 +24,12 @@ public:
 //![1]
 
     HueWheel(QQuickItem *parent = 0);
+    /*
+    HueWheel() : m_margin(1), m_wheelWidth(15), m_name(""), m_fileName("")  { reset(); }
+    HueWheel(int m, int ww, int name, int filename, TemplateValue TV) : m_margin(m), m_wheelWidth(ww), m_name(name), m_fileName(filename), m_TV(TV) {}
+    HueWheel(const HueWheel &other) { m_margin = other.m_margin; m_wheelWidth = other.m_wheelWidth; m_name = other.m_name; m_fileName = other.m_fileName; m_TV = other.m_TV;  }
+    //~HueWheel() { } */
+
     void paint(QPainter *painter);
     int margin() const {
         return m_margin;
@@ -65,6 +71,9 @@ public:
     Q_INVOKABLE void computeMostFitTemplate();
     Q_INVOKABLE void computeMostFitTemplateX(int X);
     Q_INVOKABLE void fitTemplateX(int X, int scale);
+    Q_INVOKABLE void updateWithFrame();
+    Q_INVOKABLE void updateByThread();
+    //Q_INVOKABLE QVariant HW() const;
 //![2]
 
 signals:
@@ -84,5 +93,6 @@ private:
 };
 //![3]
 
+//Q_DECLARE_METATYPE(HueWheel*)
 #endif // HUEWHEEL_H
 

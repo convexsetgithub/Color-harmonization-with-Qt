@@ -5,6 +5,8 @@
 #include "wheelcontroller.h"
 #include "template.h"
 #include "myimage.h"
+
+GlobalTemplate GT;
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

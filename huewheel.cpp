@@ -42,6 +42,9 @@
 #include <QPainter>
 #include <QtCore/qmath.h>
 #include "math.h"
+#include <thread>
+extern GlobalTemplate GT;
+
 HueWheel::HueWheel(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
@@ -289,5 +292,24 @@ void HueWheel::shiftImageWithSpatialLocality() {
     update();
 }
 
+void HueWheel::updateWithFrame() {
+    while(1) {
+        m_TV = GT.m_TV;
+        m_image = GT.m_image;
+        computeHueHistogram();
+        update();
+    }
+}
+
+void HueWheel::updateByThread() {
+    thread mThread( updateWithFrame );
+}
+
+/*
+QVariant HueWheel::HW() const {
+    QVariant var;
+    var.setValue(this);
+    return var;
+} */
 
 

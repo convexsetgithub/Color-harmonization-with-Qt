@@ -36,4 +36,10 @@ public:
     long long int * computeArcDistanceLabel(int arc, int hue, int id);
     int targetHueWithSpatialLocality(int i, int j, QImage &image, TemplateValue m_TV);
 };
+
+class GlobalTemplate {
+public:
+    TemplateValue m_TV;
+    QImage m_image;
+};
 #endif // TEMPLATE_H

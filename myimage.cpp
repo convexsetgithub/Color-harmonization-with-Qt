@@ -135,6 +135,17 @@ void MyImage::setTV(const QVariant& TV) {
     update();
 }
 
+/*
+QVariant MyImage::HW() const {
+    QVariant var;
+    var.setValue(m_HW);
+    return var;
+}
+void MyImage::setHW(const QVariant& HW) {
+    m_HW = HW.value<HueWheel*>();
+} */
+
+
 QImage MyImage::fit500(QImage * image) {
     //qDebug() << "ImageWidth = " << image->width() << "ImageHeight = " << image->height();
     if (image->width() >= image->height() && image->width() > 500) {
@@ -195,7 +206,7 @@ void MyImage::computeMostFitTemplateX(int X) {
             m_TV = temp;
         //qDebug() << "Type = " << HT.names[i] << "Arc = " << temp.arc << "Distance" << temp.distance;
     }
-    shiftImage();
+    //shiftImage();
 }
 
 QImage MyImage::fitX(QImage * image, int X) {

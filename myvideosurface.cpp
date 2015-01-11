@@ -2,9 +2,10 @@
 
 #include "myvideosurface.h"
 #include "myimage.h"
+#include "template.h"
 //MyVideoSurface::MyVideoSurface(QObject * parent=NULL) : QAbstractVideoSurface(parent)
 //{}
-
+extern GlobalTemplate GT;
 
 bool MyVideoSurface::present(const QVideoFrame& frame){
     if (frame.isValid()) {
@@ -21,8 +22,11 @@ bool MyVideoSurface::present(const QVideoFrame& frame){
         //if (counter % 100 == 0) {
             counter = 0;
             //qDebug() << "PrintImage";
-            show->setImage(show->fit500(&img));
+            QImage image = show->fit500(&img);
+            show->setImage(image);
             show->computeMostFitTemplateX(10);
+            GT.m_TV = show->getTV();
+            GT.m_image = image;
             show->update();
         //}
 

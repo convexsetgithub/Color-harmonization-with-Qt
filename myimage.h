@@ -10,8 +10,9 @@
 #include <QCamera>
 #include <QVideoWidget>
 #include "myvideosurface.h"
+#include "huewheel.h"
 //![0]
-
+class HueWheel;
 class MyImage : public QQuickPaintedItem
 {
 //![0]
@@ -39,7 +40,12 @@ public:
     Q_INVOKABLE void shiftImageWithSpatialLocality();
     int targetHueWithSpatialLocality(int i, int j, QImage &o_image);
     Q_INVOKABLE QVariant TV() const;
+    TemplateValue getTV(){ return m_TV; }
     Q_INVOKABLE void setTV(const QVariant &TV);
+    /*
+    Q_INVOKABLE QVariant HW() const;
+    Q_INVOKABLE void setHW(const QVariant &HW); */
+
     Q_INVOKABLE void reload();
     Q_INVOKABLE void openCamera();
     Q_INVOKABLE void setSurface();
@@ -55,7 +61,7 @@ signals:
 private:
     QByteArray device;
     MyVideoSurface surface;
-
+    HueWheel * m_HW;
     QString m_name;
     QString m_fileName;
     QImage m_image;

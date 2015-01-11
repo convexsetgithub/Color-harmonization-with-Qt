@@ -138,6 +138,11 @@ ApplicationWindow {
                 onClicked: {
                     image5.setSurface();
                     image5.openCamera();
+                    image6.updateByThread();
+                    //image2.setTV(image6.TV());
+                    //image4.setTV(image6.TV());
+                    //image2.shiftImage();
+                    //image4.shiftImage();
                 }
             }
         }
@@ -189,6 +194,7 @@ ApplicationWindow {
             margin: 1; wheelWidth: 15
             fileName: image1.fileName;
         }
+
         MyImage {
             id: image5
             x: 1048
@@ -196,6 +202,16 @@ ApplicationWindow {
             width: 500
             height: 500
             name: "cameraImage"
+            fileName: "";
+        }
+
+        HueWheel {
+            id: image6
+            name: "cameraHue"
+            x: 1048
+            y: 506
+            width: 300; height: 300
+            margin: 1; wheelWidth: 15
             fileName: "";
         }
 
