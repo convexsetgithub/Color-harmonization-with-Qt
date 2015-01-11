@@ -5,7 +5,17 @@
 #include <QColor>
 #include <QImage>
 #include "template.h"
+#include <QAbstractVideoSurface>
+#include <QVideoFrame>
+#include <QCamera>
+#include <QVideoWidget>
+#include "myvideosurface.h"
 //![0]
+//!
+//!
+//!
+//!
+
 class MyImage : public QQuickPaintedItem
 {
 //![0]
@@ -42,6 +52,8 @@ signals:
 //![2]
 
 private:
+    QByteArray device;
+    MyVideoSurface surface;
     QImage fit500(QImage * image);
     QString m_name;
     QString m_fileName;
@@ -50,6 +62,9 @@ private:
 //![3]
 };
 //![3]
+
+
+
 
 #endif // MYIMAGE
 
