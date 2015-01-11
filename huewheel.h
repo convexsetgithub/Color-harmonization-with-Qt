@@ -71,8 +71,10 @@ public:
     Q_INVOKABLE void computeMostFitTemplate();
     Q_INVOKABLE void computeMostFitTemplateX(int X);
     Q_INVOKABLE void fitTemplateX(int X, int scale);
-    Q_INVOKABLE void updateWithFrame();
+    void updateWithFrame();
     Q_INVOKABLE void updateByThread();
+    void updateWithFrameTV();
+    Q_INVOKABLE void updateByThreadShift();
     //Q_INVOKABLE QVariant HW() const;
 //![2]
 

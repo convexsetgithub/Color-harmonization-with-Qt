@@ -22,6 +22,7 @@ HEADERS += \
     myimage.h \
     huewheel.h \
     template.h \
-    myvideosurface.h
+    myvideosurface.h \
+    huewheelthread.h
 
 CONFIG += qt

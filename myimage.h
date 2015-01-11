@@ -54,6 +54,8 @@ public:
     QImage fit500(QImage * image);
     void computeMostFitTemplateX(int X);
     QImage fitX(QImage * image, int X);
+    void updateWithFrameTV();
+    Q_INVOKABLE void updateByThreadShift();
 signals:
     void fileNameChanged();
 //![2]

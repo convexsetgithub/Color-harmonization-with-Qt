@@ -42,6 +42,8 @@
 #include <math.h>
 #include <QCameraExposure>
 #include <QCameraImageProcessing>
+#include "huewheelthread.h"
+extern GlobalTemplate GT;
 MyImage::MyImage(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
@@ -221,4 +223,16 @@ QImage MyImage::fitX(QImage * image, int X) {
     }
     else
         return *image;
+}
+
+void MyImage::updateWithFrameTV() {
+    while(1) {
+        m_TV = GT.m_TV;
+        shiftImage();
+    }
+}
+
+void MyImage::updateByThreadShift() {
+    MyImageTV * miT = new MyImageTV(this);
+    miT->start();
 }

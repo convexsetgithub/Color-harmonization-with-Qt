@@ -139,10 +139,8 @@ ApplicationWindow {
                     image5.setSurface();
                     image5.openCamera();
                     image6.updateByThread();
-                    //image2.setTV(image6.TV());
-                    //image4.setTV(image6.TV());
-                    //image2.shiftImage();
-                    //image4.shiftImage();
+                    image2.updateByThreadShift();
+                    image4.updateByThreadShift();
                 }
             }
         }

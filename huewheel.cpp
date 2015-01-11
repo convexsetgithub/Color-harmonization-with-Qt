@@ -42,7 +42,8 @@
 #include <QPainter>
 #include <QtCore/qmath.h>
 #include "math.h"
-#include <thread>
+#include "huewheelthread.h"
+
 extern GlobalTemplate GT;
 
 HueWheel::HueWheel(QQuickItem *parent)
@@ -302,8 +303,24 @@ void HueWheel::updateWithFrame() {
 }
 
 void HueWheel::updateByThread() {
-    thread mThread( updateWithFrame );
+    HWThread * hwT = new HWThread(this);
+    hwT->start();
 }
+
+
+void HueWheel::updateWithFrameTV() {
+    while(1) {
+        m_TV = GT.m_TV;
+        shiftImage();
+    }
+}
+
+void HueWheel::updateByThreadShift() {
+    HWThreadTV * hwT = new HWThreadTV(this);
+    hwT->start();
+}
+
+
 
 /*
 QVariant HueWheel::HW() const {
