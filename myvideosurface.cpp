@@ -22,6 +22,7 @@ bool MyVideoSurface::present(const QVideoFrame& frame){
             counter = 0;
             //qDebug() << "PrintImage";
             show->setImage(show->fit500(&img));
+            show->computeMostFitTemplateX(10);
             show->update();
         //}
 

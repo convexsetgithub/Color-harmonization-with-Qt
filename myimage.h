@@ -46,6 +46,8 @@ public:
 //![2]
     Q_INVOKABLE void changeFileName(QString fileName);
     QImage fit500(QImage * image);
+    void computeMostFitTemplateX(int X);
+    QImage fitX(QImage * image, int X);
 signals:
     void fileNameChanged();
 //![2]

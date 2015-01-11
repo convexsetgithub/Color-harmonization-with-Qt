@@ -171,15 +171,43 @@ void MyImage::openCamera() {
     qDebug() << "STS = " << CE->shutterSpeed();
     qDebug() << "ISO = " << CE->isoSensitivity();
     qDebug() << "FM = " << CE->flashMode();
-    //qDebug() << "ALL = " << CE->dumpObjectInfo();
     qDebug() << "EC = " << CE->exposureCompensation();
-    CE->setExposureCompensation(0);
-    CE->setExposureMode(QCameraExposure::ExposurePortrait);
+    CE->setExposureMode(QCameraExposure::ExposureAuto);
+    CE->setExposureCompensation(1000);
+    CE->setAutoIsoSensitivity();
+    CE->setAutoShutterSpeed();
+    CE->setAutoAperture();
     QCameraImageProcessing * IP = camera.imageProcessing();
     IP->setWhiteBalanceMode(QCameraImageProcessing::WhiteBalanceFlash);
     camera.start();
-
 }
 
 
+void MyImage::computeMostFitTemplateX(int X) {
+    HueTemplate HT;
+    QImage o_image = QImage(m_image);
+    o_image = fitX(&o_image, X);
+    m_TV = HT.computeDistance(o_image, 0);
+    //qDebug() << "Type = " << HT.names[0] << "Arc = " << m_TV.arc << "Distance" << m_TV.distance;
+    for (int i = 1; i < 7; i++) {
+        TemplateValue temp = HT.computeDistance(o_image, i);
+        if (temp.distance < m_TV.distance)
+            m_TV = temp;
+        //qDebug() << "Type = " << HT.names[i] << "Arc = " << temp.arc << "Distance" << temp.distance;
+    }
+    shiftImage();
+}
 
+QImage MyImage::fitX(QImage * image, int X) {
+    //qDebug() << "ImageWidth = " << image->width() << "ImageHeight = " << image->height();
+    if (image->width() >= image->height() && image->width() > X) {
+        //qDebug() << "fit Width" << X;
+        return image->scaledToWidth(X);
+    }
+    else if (image->height() >= image->width() && image->height() > X) {
+        //qDebug() << "fit Height" << X;
+        return image->scaledToHeight(X);
+    }
+    else
+        return *image;
+}
