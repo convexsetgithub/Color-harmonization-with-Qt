@@ -9,12 +9,12 @@ class MyImage;
 class MyVideoSurface: public QAbstractVideoSurface{
     Q_OBJECT
 public:
-    MyVideoSurface(QObject * parent=NULL) : QAbstractVideoSurface(parent)
+    MyVideoSurface(QObject * parent = NULL) : QAbstractVideoSurface(parent)
     {}
 
     QList<QVideoFrame::PixelFormat>
     supportedPixelFormats(QAbstractVideoBuffer::HandleType type) const{
-        return QList<QVideoFrame::PixelFormat>() << QVideoFrame::Format_RGB24 ; // here return whatever formats you will handle
+        return QList<QVideoFrame::PixelFormat>() << QVideoFrame::Format_RGB32 ; // here return whatever formats you will handle
     }
     QImage img;
     MyImage * show;

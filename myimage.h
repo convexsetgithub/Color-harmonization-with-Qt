@@ -11,10 +11,6 @@
 #include <QVideoWidget>
 #include "myvideosurface.h"
 //![0]
-//!
-//!
-//!
-//!
 
 class MyImage : public QQuickPaintedItem
 {
@@ -45,6 +41,8 @@ public:
     Q_INVOKABLE QVariant TV() const;
     Q_INVOKABLE void setTV(const QVariant &TV);
     Q_INVOKABLE void reload();
+    Q_INVOKABLE void openCamera();
+    Q_INVOKABLE void setSurface();
 //![2]
     Q_INVOKABLE void changeFileName(QString fileName);
 signals:

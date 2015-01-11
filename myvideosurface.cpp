@@ -15,8 +15,8 @@ bool MyVideoSurface::present(const QVideoFrame& frame){
                      cloneFrame.height(),
                      QVideoFrame::imageFormatFromPixelFormat(cloneFrame.pixelFormat()));
 
-       // do something with the image ...
-      //img = &img1;
+        // do something with the image ...
+        //img = &img1;
         show->update();
 
         cloneFrame.unmap();

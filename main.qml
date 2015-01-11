@@ -134,8 +134,11 @@ ApplicationWindow {
                 onClicked: image3.fitTemplateX(7, 100);
             }
             ToolButton{
-                //iconSource: "camera.png"
-                //onClicked: camera.imageCapture.capture();
+                iconSource: "camera.png"
+                onClicked: {
+                    image5.setSurface();
+                    image5.openCamera();
+                }
             }
         }
     }
@@ -186,6 +189,16 @@ ApplicationWindow {
             margin: 1; wheelWidth: 15
             fileName: image1.fileName;
         }
+        MyImage {
+            id: image5
+            x: 1048
+            y: 0
+            width: 500
+            height: 500
+            name: "cameraImage"
+            fileName: "";
+        }
+
         MouseArea {
             anchors.fill: parent
             onClicked: messageDialog.show(qsTr("Got Mouse"));
@@ -198,6 +211,7 @@ ApplicationWindow {
         function changeInput (fileUrl) {
             image1.changeFileName (fileUrl);
         }
+        /*
         Item {
             x: 1048
             y: 0
@@ -234,16 +248,6 @@ ApplicationWindow {
                 focus : visible // to receive focus and capture key events when visible
             }
 
-            MyVideoProbe {
-                id: myvideoprobe
-                source: camera
-                /* active: true
-                onFrame: {
-                    console.debug("frame\n");
-                    console.debug(videoFrame);
-                }*/
-            }
-
             Image {
                 id: photoPreview
                 x: 0
@@ -251,7 +255,7 @@ ApplicationWindow {
                 width: 500
                 height: 281
             }
-        }
+        }*/
     }
 
     MessageDialog {

@@ -156,14 +156,18 @@ void MyImage::changeFileName(QString fileName) {
 }
 
 void MyImage::reload() {
+    update();
+    emit fileNameChanged();
+}
+void MyImage::setSurface() {
+    m_image = surface.img;
+    surface.show = this;
+}
+void MyImage::openCamera() {
     device = QCamera::availableDevices()[0];
     static QCamera camera(device);
-            m_image = surface.img;
-            surface.show = this;
-            camera.setViewfinder(&surface);
-            camera.start();
-    //update();
-    //emit fileNameChanged();
+    camera.setViewfinder(&surface);
+    camera.start();
 }
 
 
