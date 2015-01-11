@@ -15,5 +15,6 @@
         <file>V.png</file>
         <file>X.png</file>
         <file>Y.png</file>
+        <file>camera.png</file>
     </qresource>
 </RCC>

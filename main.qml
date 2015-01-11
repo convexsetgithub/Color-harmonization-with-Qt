@@ -4,10 +4,10 @@ import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
 import Images 1.0
-
+import QtMultimedia 5.0
 ApplicationWindow {
     title: qsTr("Color Hamonization")
-    width: 1024
+    width: 1600
     height: 900
     visible: true
 
@@ -133,6 +133,10 @@ ApplicationWindow {
                 iconSource: "N.png"
                 onClicked: image3.fitTemplateX(7, 100);
             }
+            ToolButton{
+                //iconSource: "camera.png"
+                //onClicked: camera.imageCapture.capture();
+            }
         }
     }
 
@@ -193,6 +197,60 @@ ApplicationWindow {
         }
         function changeInput (fileUrl) {
             image1.changeFileName (fileUrl);
+        }
+        Item {
+            x: 1048
+            y: 0
+            width: 500
+            height: 900
+            Camera {
+                id: camera
+
+                imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceFlash
+
+                exposure {
+                    exposureCompensation: -1.0
+                    exposureMode: Camera.ExposurePortrait
+                }
+
+                flash.mode: Camera.FlashRedEyeReduction
+
+                imageCapture {
+                    onImageCaptured: {
+                        photoPreview.source = preview;  // Show the preview in an Image
+                        //console.debug(camera.imageCapture.capturedImagePath);
+                    }
+                }
+            }
+
+            VideoOutput {
+                id: video
+                source: camera
+                //anchors.fill: parent
+                x: 0
+                y: 0
+                width: 500
+                height: 281
+                focus : visible // to receive focus and capture key events when visible
+            }
+
+            MyVideoProbe {
+                id: myvideoprobe
+                source: camera
+                /* active: true
+                onFrame: {
+                    console.debug("frame\n");
+                    console.debug(videoFrame);
+                }*/
+            }
+
+            Image {
+                id: photoPreview
+                x: 0
+                y: 324
+                width: 500
+                height: 281
+            }
         }
     }
 

@@ -1,11 +1,12 @@
 TEMPLATE = app
 
-QT += qml quick widgets
+QT += qml quick widgets multimedia
 
 SOURCES += main.cpp \
     myimage.cpp \
     huewheel.cpp \
-    template.cpp
+    template.cpp \
+    myvideoprobe.cpp
 
 RESOURCES += qml.qrc
 
@@ -18,4 +19,5 @@ include(deployment.pri)
 HEADERS += \
     myimage.h \
     huewheel.h \
-    template.h
+    template.h \
+    myvideoprobe.h
