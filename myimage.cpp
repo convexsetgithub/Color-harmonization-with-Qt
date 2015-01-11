@@ -40,6 +40,7 @@
 #include "myimage.h"
 #include <QPainter>
 #include <math.h>
+
 MyImage::MyImage(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
@@ -155,7 +156,15 @@ void MyImage::changeFileName(QString fileName) {
 }
 
 void MyImage::reload() {
-    emit fileNameChanged();
+    device = QCamera::availableDevices()[0];
+    static QCamera camera(device);
+            m_image = surface.img;
+            surface.show = this;
+            camera.setViewfinder(&surface);
+            camera.start();
+    //update();
+    //emit fileNameChanged();
 }
-//![0]
+
+
 

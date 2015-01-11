@@ -6,9 +6,11 @@ SOURCES += main.cpp \
     myimage.cpp \
     huewheel.cpp \
     template.cpp \
-    myvideoprobe.cpp
+    myvideosurface.cpp
 
 RESOURCES += qml.qrc
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia multimediawidgets
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -20,4 +22,6 @@ HEADERS += \
     myimage.h \
     huewheel.h \
     template.h \
-    myvideoprobe.h
+    myvideosurface.h
+
+CONFIG += qt
