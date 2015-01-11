@@ -69,7 +69,7 @@ QImage HueWheel::image() const
 
 void HueWheel::setImage(const QImage &image)
 {
-    m_image = image;
+    o_image = image;
 }
 
 QString HueWheel::fileName() const
@@ -93,8 +93,9 @@ void HueWheel::setFileName(const QString &fileName)
 {
     reset();
     m_fileName = fileName;
-    m_image = QImage(fileName);
-    m_image = fit500(&m_image);
+    o_image = QImage(fileName);
+    o_image = fit500(&o_image);
+    m_image = o_image;
     qDebug() << m_name << "file set" << m_fileName << "format = " << m_image.format();
     computeHueHistogram();
     update();
@@ -103,6 +104,7 @@ void HueWheel::setFileName(const QString &fileName)
 
 void HueWheel::shiftImage() {
     HueTemplate HT;
+    m_image = o_image;
     for (int i = 0; i < m_image.width(); i++) {
         for (int j = 0; j < m_image.height(); j++) {
             QColor qColor = QColor::fromRgb(m_image.pixel(i, j));
@@ -189,6 +191,7 @@ void HueWheel::drawTemplate(QPainter *painter, int rInner) {
 
 void HueWheel::computeMostFitTemplate() {
     HueTemplate HT;
+    m_image = o_image;
     m_TV = HT.computeDistance(m_image, 0);
     qDebug() << "Type = " << HT.names[0] << "Arc = " << m_TV.arc << "Distance" << m_TV.distance;
     for (int i = 1; i < 7; i++) {
@@ -202,12 +205,12 @@ void HueWheel::computeMostFitTemplate() {
 
 void HueWheel::computeMostFitTemplateX(int X) {
     HueTemplate HT;
-    QImage o_image = QImage(m_fileName);
-    o_image = fitX(&o_image, X);
-    m_TV = HT.computeDistance(o_image, 0);
+    QImage imageResize = QImage(m_fileName);
+    imageResize = fitX(&imageResize, X);
+    m_TV = HT.computeDistance(imageResize, 0);
     qDebug() << "Type = " << HT.names[0] << "Arc = " << m_TV.arc << "Distance" << m_TV.distance;
     for (int i = 1; i < 7; i++) {
-        TemplateValue temp = HT.computeDistance(o_image, i);
+        TemplateValue temp = HT.computeDistance(imageResize, i);
         if (temp.distance < m_TV.distance)
             m_TV = temp;
         qDebug() << "Type = " << HT.names[i] << "Arc = " << temp.arc << "Distance" << temp.distance;
@@ -217,9 +220,9 @@ void HueWheel::computeMostFitTemplateX(int X) {
 
 void HueWheel::fitTemplateX(int X, int scale) {
     HueTemplate HT;
-    QImage o_image = QImage(m_fileName);
-    o_image = fitX(&o_image, scale);
-    m_TV = HT.computeDistance(o_image, X);
+    QImage imageResize = QImage(m_fileName);
+    imageResize = fitX(&imageResize, scale);
+    m_TV = HT.computeDistance(imageResize, X);
     update();
 }
 
@@ -272,6 +275,7 @@ QImage HueWheel::fitX(QImage * image, int X) {
 
 void HueWheel::shiftImageWithSpatialLocality() {
     HueTemplate HT;
+    m_image = o_image;
     //QImage o_image = QImage(m_fileName);
     //o_image = fit500(&o_image);
     for (int i = 0; i < m_image.width(); i++) {
@@ -294,11 +298,16 @@ void HueWheel::shiftImageWithSpatialLocality() {
 }
 
 void HueWheel::updateWithFrame() {
+    int counter = 0;
     while(1) {
-        m_TV = GT.m_TV;
-        m_image = GT.m_image;
-        computeHueHistogram();
-        update();
+        if (counter % 10000000 == 0){
+            m_TV = GT.m_TV;
+            m_image = GT.m_image;
+            computeHueHistogram();
+            update();
+            counter = 0;
+
+        }
     }
 }
 
@@ -310,8 +319,15 @@ void HueWheel::updateByThread() {
 
 void HueWheel::updateWithFrameTV() {
     while(1) {
-        m_TV = GT.m_TV;
-        shiftImage();
+        int counter = 0;
+        while(1) {
+            counter++;
+            if (counter % 10000000 == 0){
+                m_TV = GT.m_TV;
+                shiftImage();
+                counter = 0;
+            }
+        }
     }
 }
 

@@ -66,6 +66,7 @@ private:
     HueWheel * m_HW;
     QString m_name;
     QString m_fileName;
+    QImage o_image;
     QImage m_image;
     TemplateValue m_TV;
 //![3]

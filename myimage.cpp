@@ -68,8 +68,9 @@ void MyImage::setFileName(const QString &fileName)
 {
     reset();
     m_fileName = fileName;
-    m_image = QImage(m_fileName);
-    m_image = fit500(&m_image);
+    o_image = QImage(m_fileName);
+    o_image = fit500(&o_image);
+    m_image = o_image;
     qDebug() << m_name << "file set" << m_fileName;
     qDebug() << "After fit 500" << "ImageWidth = " << m_image.width() << "ImageHeight = " << m_image.height();
     update();
@@ -82,11 +83,13 @@ QImage MyImage::image() const
 
 void MyImage::setImage(const QImage &image)
 {
-    m_image = image;
+    o_image = image;
+    m_image = o_image;
 }
 
 void MyImage::shiftImage() {
     HueTemplate HT;
+    m_image = o_image;
     for (int i = 0; i < m_image.width(); i++) {
         for (int j = 0; j < m_image.height(); j++) {
             QColor qColor = QColor::fromRgb(m_image.pixel(i, j));
@@ -101,6 +104,7 @@ void MyImage::shiftImage() {
 
 void MyImage::shiftImageWithSpatialLocality() {
     HueTemplate HT;
+    m_image = o_image;
     //QImage o_image = QImage(m_fileName);
     //o_image = fit500(&o_image);
     for (int i = 0; i < m_image.width(); i++) {
@@ -165,7 +169,7 @@ QImage MyImage::fit500(QImage * image) {
 //![0]
 
 void MyImage::changeFileName(QString fileName) {
-    setFileName(fileName.remove(0, 8));
+    setFileName(fileName.remove(0, 7));
     emit fileNameChanged();
 }
 
@@ -226,9 +230,14 @@ QImage MyImage::fitX(QImage * image, int X) {
 }
 
 void MyImage::updateWithFrameTV() {
+    int counter = 0;
     while(1) {
-        m_TV = GT.m_TV;
-        shiftImage();
+        counter++;
+        if (counter % 10000000 == 0){
+            m_TV = GT.m_TV;
+            shiftImage();
+            counter =0;
+        }
     }
 }
 

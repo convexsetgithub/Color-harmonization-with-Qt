@@ -88,6 +88,7 @@ private:
     QString m_name;
     QString m_fileName;
     QImage m_image;
+    QImage o_image;
     int hueHistogram[360];
     int maxHue;
     TemplateValue m_TV;
