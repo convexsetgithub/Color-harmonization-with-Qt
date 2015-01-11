@@ -22,6 +22,10 @@ bool MyVideoSurface::present(const QVideoFrame& frame){
         //if (counter % 100 == 0) {
             counter = 0;
             //qDebug() << "PrintImage";
+            QRect rect(400, 240, 800, 480);
+            img = img.copy(rect);
+            img = img.mirrored(true,false);
+            //qDebug() << img.width() << " " << img.height();
             QImage image = show->fit500(&img);
             show->setImage(image);
             show->computeMostFitTemplateX(10);

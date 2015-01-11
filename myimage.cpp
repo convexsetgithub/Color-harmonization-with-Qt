@@ -195,6 +195,7 @@ void MyImage::openCamera() {
     CE->setAutoShutterSpeed();
     CE->setAutoAperture();
     QCameraImageProcessing * IP = camera.imageProcessing();
+    //camera.Position = QCamera::FrontFace;
     IP->setWhiteBalanceMode(QCameraImageProcessing::WhiteBalanceFlash);
     camera.start();
 }
@@ -233,10 +234,10 @@ void MyImage::updateWithFrameTV() {
     int counter = 0;
     while(1) {
         counter++;
-        if (counter % 10000000 == 0){
+        if (counter % 100000000 == 0){
             m_TV = GT.m_TV;
             shiftImage();
-            counter =0;
+            counter = 0;
         }
     }
 }

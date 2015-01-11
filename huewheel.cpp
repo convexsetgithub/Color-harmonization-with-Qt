@@ -300,7 +300,7 @@ void HueWheel::shiftImageWithSpatialLocality() {
 void HueWheel::updateWithFrame() {
     int counter = 0;
     while(1) {
-        if (counter % 10000000 == 0){
+        if (counter % 100000000 == 0){
             m_TV = GT.m_TV;
             m_image = GT.m_image;
             computeHueHistogram();
@@ -322,7 +322,7 @@ void HueWheel::updateWithFrameTV() {
         int counter = 0;
         while(1) {
             counter++;
-            if (counter % 10000000 == 0){
+            if (counter % 100000000 == 0){
                 m_TV = GT.m_TV;
                 shiftImage();
                 counter = 0;
