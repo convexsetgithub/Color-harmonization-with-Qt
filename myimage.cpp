@@ -97,8 +97,8 @@ void MyImage::shiftImage() {
 
 void MyImage::shiftImageWithSpatialLocality() {
     HueTemplate HT;
-    QImage o_image = QImage(m_fileName);
-    o_image = fit500(&o_image);
+    //QImage o_image = QImage(m_fileName);
+    //o_image = fit500(&o_image);
     for (int i = 0; i < m_image.width(); i++) {
         for (int j = 0; j < m_image.height(); j++) {
             QColor qColor = QColor::fromRgb(m_image.pixel(i, j));
@@ -109,7 +109,7 @@ void MyImage::shiftImageWithSpatialLocality() {
                 targetHue = HT.targetHueWithSpatialLocality(i, j, m_image, m_TV);
             //else
                 //targetHue =  HT.targetHue(m_TV.arc, hue, m_TV.id);
-            //delete [] labels
+            //delete [] labels;
             QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
             m_image.setPixel(i, j, qRgb(targetColor.redF() * 255.0, targetColor.greenF() * 255.0, targetColor.blueF() * 255.0));
         }

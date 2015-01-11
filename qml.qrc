@@ -6,5 +6,6 @@
         <file>drawTemplate.png</file>
         <file>drawTemplateNoLocality.png</file>
         <file>reload.png</file>
+        <file>computeTemplateX.png</file>
     </qresource>
 </RCC>

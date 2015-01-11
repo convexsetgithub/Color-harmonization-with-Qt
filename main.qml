@@ -40,12 +40,21 @@ ApplicationWindow {
                 onTriggered: image3.computeMostFitTemplate();
             }
             MenuItem {
-                text: qsTr("&DrawTemplate")
+                text: qsTr("&DrawTemplateLocality")
                 onTriggered: {
                     image2.setTV(image3.TV());
                     image4.setTV(image3.TV());
                     image2.shiftImageWithSpatialLocality();
                     image4.shiftImageWithSpatialLocality();
+                }
+            }
+            MenuItem {
+                text: qsTr("&DrawTemplateSimple")
+                onTriggered: {
+                    image2.setTV(image3.TV());
+                    image4.setTV(image3.TV());
+                    image2.shiftImage();
+                    image4.shiftImage();
                 }
             }
         }
@@ -58,6 +67,12 @@ ApplicationWindow {
                 text: "ComputeTemplate"
                 iconSource: "computeTemplate.png"
                 onClicked: image3.computeMostFitTemplate();
+            }
+            //anchors.fill: parent
+            ToolButton{
+                text: "ComputeTemplate"
+                iconSource: "computeTemplateX.png"
+                onClicked: image3.computeMostFitTemplateX(50);
             }
             ToolButton{
                 text: "DrawTemplate"

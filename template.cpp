@@ -170,7 +170,7 @@ float HueTemplate::counterOrcouterWise(int hue, int center) {
 
 int HueTemplate::distance(int hue1, int hue2, int direction) {
     int d = (hue1 - hue2 + 360) % 360;
-    if (direction > 0) {
+    if (direction < 0) {
         return d;
     }
     else {
@@ -321,8 +321,8 @@ int HueTemplate::targetHueWithSpatialLocality(int i, int j, QImage &image, Templ
         if ( targetX >= 0 && targetX < image.width() && targetY >= 0 && targetY < image.height() ) {
             QColor qColor = QColor::fromRgb(image.pixel(targetX, targetY));
             int choice = ((1 << (m + 1)) & targetCombination) > 0 ? 1 : 0;
-            int finalHue = targetHue(m_TV.arc, hues[m + 1], m_TV.id, targetBorders[ m + 1 + choice * (locality + 1)]);
-            QColor targetColor = QColor::fromHsv(finalHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
+            int targetHue = this->targetHue(m_TV.arc, hues[m + 1], m_TV.id, targetBorders[ m + 1 + choice * (locality + 1)]);
+            QColor targetColor = QColor::fromHsv(targetHue, qColor.hsvSaturation(), qColor.value(), qColor.alpha());
             image.setPixel(targetX, targetY, qRgb(targetColor.redF() * 255.0, targetColor.greenF() * 255.0, targetColor.blueF() * 255.0));
         }
     }

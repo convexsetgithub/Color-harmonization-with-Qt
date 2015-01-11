@@ -90,6 +90,7 @@ void HueWheel::setFileName(const QString &fileName)
     reset();
     m_fileName = fileName;
     m_image = QImage(fileName);
+    m_image = fit500(&m_image);
     qDebug() << m_name << "file set" << m_fileName << "format = " << m_image.format();
     computeHueHistogram();
     update();
@@ -195,6 +196,21 @@ void HueWheel::computeMostFitTemplate() {
     update();
 }
 
+void HueWheel::computeMostFitTemplateX(int X) {
+    HueTemplate HT;
+    QImage o_image = QImage(m_fileName);
+    o_image = fitX(&o_image, X);
+    m_TV = HT.computeDistance(o_image, 0);
+    qDebug() << "Type = " << HT.names[0] << "Arc = " << m_TV.arc << "Distance" << m_TV.distance;
+    for (int i = 1; i < 7; i++) {
+        TemplateValue temp = HT.computeDistance(o_image, i);
+        if (temp.distance < m_TV.distance)
+            m_TV = temp;
+        qDebug() << "Type = " << HT.names[i] << "Arc = " << temp.arc << "Distance" << temp.distance;
+    }
+    update();
+}
+
 void HueWheel::computeHueHistogram() {
     maxHue = 0;
     for (int i = 0; i < 360; i++)
@@ -214,9 +230,37 @@ void HueWheel::computeHueHistogram() {
     }
 }
 
+QImage HueWheel::fit500(QImage * image) {
+    qDebug() << "ImageWidth = " << image->width() << "ImageHeight = " << image->height();
+    if (image->width() >= image->height() && image->width() > 500) {
+        qDebug() << "fit500 Width";
+        return image->scaledToWidth(500);
+    }
+    else if (image->height() >= image->width() && image->height() > 500) {
+        qDebug() << "fit500 Height";
+        return image->scaledToHeight(500);
+    }
+    else
+        return *image;
+}
+
+QImage HueWheel::fitX(QImage * image, int X) {
+    qDebug() << "ImageWidth = " << image->width() << "ImageHeight = " << image->height();
+    if (image->width() >= image->height() && image->width() > X) {
+        qDebug() << "fit Width" << X;
+        return image->scaledToWidth(X);
+    }
+    else if (image->height() >= image->width() && image->height() > X) {
+        qDebug() << "fit Height" << X;
+        return image->scaledToHeight(X);
+    }
+    else
+        return *image;
+}
+
 void HueWheel::shiftImageWithSpatialLocality() {
     HueTemplate HT;
-    QImage o_image = QImage(m_fileName);
+    //QImage o_image = QImage(m_fileName);
     //o_image = fit500(&o_image);
     for (int i = 0; i < m_image.width(); i++) {
         for (int j = 0; j < m_image.height(); j++) {

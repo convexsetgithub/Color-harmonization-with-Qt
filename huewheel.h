@@ -57,11 +57,13 @@ public:
         m_TV.distance = 0;
         m_TV.id = 3;
     }
+    QImage fit500(QImage * image);
+    QImage fitX(QImage * image, int X);
     Q_INVOKABLE void shiftImage();
     Q_INVOKABLE QVariant TV() const;
     Q_INVOKABLE void setTV(const QVariant &TV);
     Q_INVOKABLE void computeMostFitTemplate();
-
+    Q_INVOKABLE void computeMostFitTemplateX(int X);
 //![2]
 
 signals:
