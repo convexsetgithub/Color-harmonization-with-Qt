@@ -23,8 +23,11 @@ public:
     static int regionNums[8];
     static int region2Shift[8];
     static char names[8];
+    static int HueDis[7][360][360];
+    void HTcompute();
     HueTemplate();
     TemplateValue computeDistance(QImage & image, int id);
+    TemplateValue computeDistanceFast(QImage & image, int id, int S[]) ;
     long long int helpComputeDistance(int arc, QImage & image, int id);
     long long int computeArcDistance(int arc, int hue, int id);
     int computeNearRegion(int arc, int hue, int id);

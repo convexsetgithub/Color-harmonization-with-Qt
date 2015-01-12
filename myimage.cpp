@@ -184,19 +184,21 @@ void MyImage::openCamera() {
     device = QCamera::availableDevices()[0];
     static QCamera camera(device);
     camera.setViewfinder(&surface);
-    QCameraExposure * CE = camera.exposure();
-    qDebug() << "STS = " << CE->shutterSpeed();
-    qDebug() << "ISO = " << CE->isoSensitivity();
-    qDebug() << "FM = " << CE->flashMode();
-    qDebug() << "EC = " << CE->exposureCompensation();
-    CE->setExposureMode(QCameraExposure::ExposureAuto);
-    CE->setExposureCompensation(1000);
-    CE->setAutoIsoSensitivity();
-    CE->setAutoShutterSpeed();
-    CE->setAutoAperture();
-    QCameraImageProcessing * IP = camera.imageProcessing();
+    HueTemplate HT;
+    HT.HTcompute();
+    //QCameraExposure * CE = camera.exposure();
+    //qDebug() << "STS = " << CE->shutterSpeed();
+    //qDebug() << "ISO = " << CE->isoSensitivity();
+    //qDebug() << "FM = " << CE->flashMode();
+    //qDebug() << "EC = " << CE->exposureCompensation();
+    //CE->setExposureMode(QCameraExposure::ExposureAuto);
+    //CE->setExposureCompensation(1000);
+    //CE->setAutoIsoSensitivity();
+    //CE->setAutoShutterSpeed();
+    //CE->setAutoAperture();
+    //QCameraImageProcessing * IP = camera.imageProcessing();
     //camera.Position = QCamera::FrontFace;
-    IP->setWhiteBalanceMode(QCameraImageProcessing::WhiteBalanceFlash);
+    //IP->setWhiteBalanceMode(QCameraImageProcessing::WhiteBalanceFlash);
     camera.start();
 }
 
@@ -205,14 +207,35 @@ void MyImage::computeMostFitTemplateX(int X) {
     HueTemplate HT;
     QImage o_image = QImage(m_image);
     o_image = fitX(&o_image, X);
-    m_TV = HT.computeDistance(o_image, 0);
+
+    int S[360];
+    for (int i = 0; i < 360; i++)
+        S[i] = 0;
+    for (int i = 0; i < o_image.width() ; i++){
+        for (int j = 0; j < o_image.height();j++){
+            QColor color = QColor(o_image.pixel(i,j));
+            S[color.hsvHue()] += color.hsvSaturation();
+        }
+    }
+
+    m_TV = HT.computeDistanceFast(o_image, 0, S);
     //qDebug() << "Type = " << HT.names[0] << "Arc = " << m_TV.arc << "Distance" << m_TV.distance;
     for (int i = 1; i < 7; i++) {
-        TemplateValue temp = HT.computeDistance(o_image, i);
+        TemplateValue temp = HT.computeDistanceFast(o_image, i, S);
         if (temp.distance < m_TV.distance)
             m_TV = temp;
         //qDebug() << "Type = " << HT.names[i] << "Arc = " << temp.arc << "Distance" << temp.distance;
     }
+
+    //old
+    //m_TV = HT.computeDistance(o_image, 0);
+    //qDebug() << "Type = " << HT.names[0] << "Arc = " << m_TV.arc << "Distance" << m_TV.distance;
+    //for (int i = 1; i < 7; i++) {
+    //    TemplateValue temp = HT.computeDistance(o_image, i);
+    //    if (temp.distance < m_TV.distance)
+    //        m_TV = temp;
+        //qDebug() << "Type = " << HT.names[i] << "Arc = " << temp.arc << "Distance" << temp.distance;
+    //}
     //shiftImage();
 }
 

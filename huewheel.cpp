@@ -171,6 +171,7 @@ void HueWheel::paint(QPainter *painter)
 }
 
 void HueWheel::drawTemplate(QPainter *painter, int rInner) {
+
     if (m_TV.id == -1)
         return;
     HueTemplate HT;

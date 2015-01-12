@@ -8,7 +8,52 @@ int HueTemplate::region2Arcs[8] = { 0,  0, 80, 18,   0, 18, 94, 0};
 int HueTemplate::region2Shift[8] = {0, 0, 270, 180, 0, 180, 180, 0};
 char HueTemplate::names[8] = {'i', 'V', 'L', 'I', 'T', 'Y', 'X', 'N'};
 int HueTemplate::regionNums[8] = {1, 1, 2, 2, 1, 2, 2, 0};
+int HueTemplate::HueDis[7][360][360];
 HueTemplate::HueTemplate() {
+
+}
+
+void HueTemplate::HTcompute(){
+    for (int id = 0; id < 7 ; id++){
+        for (int i = 0; i < 360 ; i++){
+            for (int j = 0; j < 360 ; j++){
+                HueDis[id][i][j] = computeArcDistance(i,j,id);
+            }
+        }
+    }
+}
+
+TemplateValue HueTemplate::computeDistanceFast(QImage & image, int id, int S[]) {
+    TemplateValue result;
+    result.arc = 0;
+    result.id = id;
+    result.distance = 0;
+    for (int j = 0; j < 360 ; j++){
+      result.distance += HueDis[id][0][j] * S[j];
+    }
+    long long int d;
+    for (int i = 1; i < 360 ; i++){
+        d = 0;
+        for (int j = 0; j < 360 ; j++){
+          d += HueDis[id][i][j] * S[j];
+        }
+        if (d < result.distance) {
+            result.arc = i;
+            result.distance = d;
+        }
+    }
+    return result;
+
+    /*result.distance = helpComputeDistance(0, image, id);
+    result.id = id;
+    for (int i = 1; i < 360; i++) {
+        long long int d = helpComputeDistance(i, image, id);
+        if (d < result.distance) {
+            result.arc = i;
+            result.distance = d;
+        }
+    }*/
+
 
 }
 
