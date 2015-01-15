@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QColor>
 #include <math.h>
+#define M_PI 3.1415926
 int HueTemplate::region1Arcs[8] = {18, 94, 18, 18, 180, 94, 94, 0};
 int HueTemplate::region2Arcs[8] = { 0,  0, 80, 18,   0, 18, 94, 0};
 int HueTemplate::region2Shift[8] = {0, 0, 270, 180, 0, 180, 180, 0};

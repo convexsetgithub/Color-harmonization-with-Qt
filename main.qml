@@ -161,7 +161,7 @@ ApplicationWindow {
             width: 500
             height: 500
             name: "inputImage"
-            fileName: "//Users/momo/icg_final/testing3.png"
+            fileName: "D://CG/icg_final/testing3.png"
         }
 
         MyImage {

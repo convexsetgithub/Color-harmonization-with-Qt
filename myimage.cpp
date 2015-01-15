@@ -169,7 +169,7 @@ QImage MyImage::fit500(QImage * image) {
 //![0]
 
 void MyImage::changeFileName(QString fileName) {
-    setFileName(fileName.remove(0, 7));
+    setFileName(fileName.remove(0, 8));
     emit fileNameChanged();
 }
 
